@@ -1,0 +1,49 @@
+function Positions = initialization_with_kmeans(PopulationSize, nvars, ub, lb, fn)
+
+    % Configuration table: dataset → {file, numFeatures, numClusters}
+    config = struct( ...
+        'D1',  {{'fisheriris',    4, 3}}, ...
+        'D2',  {{'WiFi',          7, 4}}, ...
+        'D3',  {{'BreastTissu',   9, 6}}, ...
+        'D4',  {{'Fishing',       9, 3}}, ...
+        'D5',  {{'glass',         9, 6}}, ...
+        'D6',  {{'balance',       4, 3}}, ...
+        'D7',  {{'ecoli',         7, 5}}, ...
+        'D8',  {{'blood',         4, 2}}, ...
+        'D9',  {{'Vertebral',     6, 2}}, ...
+        'D10', {{'seed',          7, 3}}, ...
+        'D11', {{'eeg',           14, 2  }}, ...
+        'D12', {{'landsat',       36, 6  }}, ...
+        'D13', {{'letter',          16, 26  }}, ...
+        'D14', {{'spambase',      57, 2  }} ...
+    );
+
+    if ~isfield(config, fn)
+        error('Unknown function name "%s".', fn);
+    end
+
+    % Correct unpacking
+    cfg = config.(fn);
+    file = cfg{1};
+    featPerCluster = cfg{2};
+    k = cfg{3};
+
+    % Load and normalize data
+    data = load(fullfile('Datasets', [file, '.mat']));
+    m = normalize(data.meas, 'range');
+
+    % Preallocate
+    Positions = zeros(PopulationSize, nvars);
+    Per = round(0.25 * PopulationSize); % first 25% initialized by K-means
+    maxiter = 10;
+
+    % K-means-initialized population
+    for i = 1:PopulationSize
+        if i <= Per
+            [~, C] = kmeans(m, k, 'MaxIter', maxiter, 'Start', 'sample');
+            Positions(i, :) = reshape(C', 1, []);  % Flatten cluster centers
+        else
+            Positions(i, :) = lb + rand(1, nvars) .* (ub - lb);
+        end
+    end
+end
