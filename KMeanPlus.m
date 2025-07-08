@@ -35,7 +35,7 @@ dlmcell(filenameSummary, header, ',', '-a');
 
 % Loop over datasets
 for d = 1:length(NewDatasetNames)
-    datafile = strcat('Datasets/New/', NewDatasetFiles{d});
+    datafile = strcat('Datasets/', NewDatasetFiles{d});
     load(datafile);
 
     k = NewClusterCounts(d);
