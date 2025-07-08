@@ -27,7 +27,7 @@ dlmcell(filenameSummary, header, ',', '-a');
 %% Run experiments
 for d = 1:length(NewDatasetFiles)
     % Load data
-    dataFile = ['Datasets/New/', NewDatasetFiles{d}];
+    dataFile = ['Datasets/', NewDatasetFiles{d}];
     load(dataFile);
     k = NewClusterCounts(d);
     meas = normalize(meas, 'range');
