@@ -20,13 +20,13 @@
 function [FoodFitness,Convergence_curve,FoodPosition]=SSA(dim,fname,Max_iter,N)
 
 fobj= @(x) GetFunction(x ,fname); 
-ub=1 ; %ones(dim,1)*1;
-lb=0;%ones(dim,1)*0;
+ub=ones(dim,1)*1;
+lb=ones(dim,1)*0;
 
 Convergence_curve = zeros(1,Max_iter);
 
 %Initialize the positions of salps
-SalpPositions=initialization(N,dim,ub,lb);
+SalpPositions=initialization(N,dim,1,0);
 
 
 FoodPosition=zeros(1,dim);
